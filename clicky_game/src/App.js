@@ -2,56 +2,43 @@ import React, { Component } from "react";
 import Card from "./components/Card";
 import Wrapper from "./components/Wrapper";
 import Score from "./components/Score";
-import ppg from "./cards.json";
+import pups from "./cards.json";
 import "./App.css";
 
 class App extends Component {
-  // Setting this.state.ppg to the cards json array
+  // Setting this.state.pups to the cards json array
   state = {
-    ppg,
-    clickedPPGIds: [],
+    pups,
+    clickedPuppyIds: [],
     score: 0,
     goal: 8,
-    status: "",
+    status: ""
   };
 
   //shuffle the pup cards in the browser when clicked
-  shuffleScoreCard = (id) => {
-    let clickedPPGIds = this.state.clickedPPGIds;
+  shuffleScoreCard = id => {
+    let clickedPuppyIds = this.state.clickedPuppyIds;
 
-    if (clickedPPGIds.includes(id)) {
-      this.setState({
-        clickedPPGIds: [],
-        score: 0,
-        status: "Game Over! You lost. Click to play again!",
-      });
+    if (clickedPuppyIds.includes(id)) {
+      this.setState({ clickedPuppyIds: [], score: 0, status: "Game Over! You lost. Click to play again!" });
       return;
     } else {
-      clickedPPGIds.push(id);
+      clickedPuppyIds.push(id)
 
-      if (clickedPPGIds.length === 8) {
-        this.setState({
-          score: 8,
-          status: "You Won! Great Job, Smartie! Click to play again!",
-          clickedPPGIds: [],
-        });
-        console.log("You Win");
+      if (clickedPuppyIds.length === 8) {
+        this.setState({ score: 8, status: "You Won! Great Job, Smartie! Click to play again!", clickedPuppyIds: [] });
+        console.log('You Win');
         return;
       }
 
-      this.setState({
-        ppg,
-        clickedPPGIds,
-        score: clickedPPGIds.length,
-        status: " ",
-      });
+      this.setState({ pups, clickedPuppyIds, score: clickedPuppyIds.length, status: " " });
 
-      for (let i = ppg.length - 1; i > 0; i--) {
+      for (let i = pups.length - 1; i > 0; i--) {
         let j = Math.floor(Math.random() * (i + 1));
-        [ppg[i], ppg[j]] = [ppg[j], ppg[i]];
+        [pups[i], pups[j]] = [pups[j], pups[i]];
       }
     }
-  };
+  }
 
   // Map over this.state.cards and render a Card component for each card object
   render() {
@@ -59,11 +46,16 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <h1 className="App-title">The Clickster</h1>
-          <p className="App-intro">Try not to click the same image twice!</p>
+          <p className="App-intro">
+            Try not to click the same image twice!
+          </p>
         </header>
-        <Score total={this.state.score} goal={8} status={this.state.status} />
+        <Score total={this.state.score}
+          goal={8}
+          status={this.state.status}
+        />
         <Wrapper>
-          {this.state.ppg.map((puppy) => (
+          {this.state.pups.map(puppy => (
             <Card
               shuffleScoreCard={this.shuffleScoreCard}
               id={puppy.id}
@@ -72,6 +64,10 @@ class App extends Component {
             />
           ))}
         </Wrapper>
+        <footer>
+          <p>Designed and built by Heather Mathies. You can find the
+          code<a href="https://github.com/hmathies/Clicky-Game" target="_blank" rel="noopener noreferrer"> here</a>.</p>
+        </footer>
       </div>
     );
   }
